@@ -3,6 +3,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+        // Instantiate userInput to collect user input
         Scanner userInput = new Scanner(System.in);
 
         // Create object array called inventory to store books
@@ -25,7 +26,7 @@ public class Main {
                 5,"0-806-40235","Maze Runner",true,"Lauren"
         );
 
-        // Display the home screen and collect the command
+        // Display the home screen and start the loop
         displayHomeScreen(userInput,inventory);
     }
 
@@ -89,33 +90,34 @@ public class Main {
     }
 
     public static void displayAvailableCheckout(Book[] bin, Scanner userInput,Book[] inventory){
+        // Print out the title
         System.out.println("------------------------------");
         System.out.println("Select a book's ID to check-out from the options below: ");
-
+        // Check the bin for the same ID and list them via ID
         for (int i = 0; i < bin.length; i++) {
             Book book = bin[i];
             if (book != null){
                 System.out.println("ID(" + book.getId() + ")" + " | " + book.getTitle());
             }
         }
-
+        // Last command (now no book can have a 0 ID)
         System.out.println("0 | Exit");
-
+        // Enter in command
         System.out.print("Enter: ");
         int command = 0;
-
+        // Loop until a proper command is given
         boolean exit = false;
         while (!exit) {
             System.out.print("Enter: ");
             command = userInput.nextInt();
-
+            // Get the book with the same ID as the command
             Book book = null;
             for (int i = 0; i < inventory.length; i++) {
                 if (inventory[i].getId() == command){
                     book = inventory[i];
                 }
             }
-
+            // Verify the book is not checked out
             if (book != null && book.isCheckedOut() == false){
                 break;
             }else {
@@ -153,29 +155,30 @@ public class Main {
     public static void displayUnavailableCheckout(Book[] bin, Scanner userInput,Book[] inventory){
         System.out.println("------------------------------");
         System.out.println("Select a book's ID to check-in from the options below: ");
-
+        // Search bin for books in inventory with the same ID
         for (int i = 0; i < bin.length; i++) {
             Book book = bin[i];
             if (book != null){
                 System.out.println("ID(" + book.getId() + ")" + " | " + book.getTitle());
             }
         }
-
+        // Last possible choice
         System.out.println("0 | Exit");
         int command = 0;
-
+        // Loop through asking for a command until a valid one is given
         boolean exit = false;
         while (!exit) {
+            // Enter command
             System.out.print("Enter: ");
             command = userInput.nextInt();
-
+            // Collect the book with the same ID from inventory
             Book book = null;
             for (int i = 0; i < inventory.length; i++) {
                 if (inventory[i].getId() == command){
                     book = inventory[i];
                 }
             }
-
+            // Verify it is checked out
             if (book != null && book.isCheckedOut()){
                 break;
             }else {
@@ -184,7 +187,7 @@ public class Main {
         }
         // Bug fix
         userInput.nextLine();
-
+        // If the command isn't 0 (exit) continue on
         if (command != 0) {
             // Get the book with the same ID as the command
             Book selectedBook = null;
@@ -206,10 +209,10 @@ public class Main {
     }
     public static void promptUnavailable(Book[] bin, Scanner userInput,Book[] inventory){
         System.out.println("------------------------------");
-
+        // Instantiate the command for later use inside the while loop
         String command;
+        // Create a while loop to collect a valid command.
         boolean exit = false;
-
         while (!exit){
             // Print out commands
             System.out.println("\nDo you want to check-in a book?");
@@ -222,7 +225,7 @@ public class Main {
             System.out.print("Enter: ");
             command = userInput.nextLine().strip();
 
-
+            // Switch case for each possible command, and an error catcher
             switch (command.toUpperCase()){
                 case "C":
                     System.out.println("\nContinuing to check-in...\n");
@@ -244,30 +247,34 @@ public class Main {
 
     public static void promptAvailable(Book[] bin, Scanner userInput,Book[] inventory){
         System.out.println("------------------------------");
-
+        // Get command and instantiate the exit bool for the loop
         int command;
         boolean exit = false;
-
+        // Loop until a proper command is given
         while (!exit){
+            // List the instructions
             System.out.println("\nDo you want to check out a book?");
             System.out.println("0 | No");
             System.out.println("1 | Yes");
-
+            // Prompt for a command
             System.out.print("Enter: ");
             command = userInput.nextInt();
-
+            // Verify the command is valid and send it to the proper function
             switch (command){
                 case 0:
+                    // Send user back to home screen
                     System.out.println("\nGoing to home screen...\n");
                     displayHomeScreen(userInput,inventory);
                     exit = true;
                     break;
                 case 1:
+                    // Send user to the check-out screen
                     System.out.println("\nContinuing to checkout...\n");
                     displayAvailableCheckout(bin,userInput,inventory);
                     exit = true;
                     break;
                 default:
+                    // Prompt for a new command, repeat the loop
                     System.out.println("\nEnter a valid command please (0-1)\n");
                     exit = false;
                     break;
